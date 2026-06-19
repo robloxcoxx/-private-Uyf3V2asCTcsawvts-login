@@ -6,24 +6,52 @@
     <title>SolaraV3 — Бесплатный инжектор для Roblox</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ===== ЗАЩИТА ОТ F12 И ВЫДЕЛЕНИЯ ===== */
+        /* ===== ЗАЩИТА ОТ F12, ВЫДЕЛЕНИЯ И КОПИРОВАНИЯ ===== */
         * {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
         }
         body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
         }
+        /* Разрешаем выделение только в полях ввода */
         input, textarea, button, .btn, .btn-option, .btn-roblox, .btn-primary, .btn-secondary, .btn-send, .logout-btn, .close-btn, .tab-btn, .nav-links a, .btn-outline {
             -webkit-user-select: text !important;
             -moz-user-select: text !important;
             -ms-user-select: text !important;
             user-select: text !important;
+            -webkit-touch-callout: text !important;
+        }
+        /* Запрет выделения для всего остального */
+        .hero-badges, .badge-float, .logo, .feature-card, .review-card, .faq-item, .stats, .footer, .injector-panel, .greeting, .status, .support-card, .chat-box, .message {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+
+        /* Дополнительная защита от выделения через псевдоэлементы */
+        ::selection {
+            background: transparent !important;
+            color: inherit !important;
+        }
+        ::-moz-selection {
+            background: transparent !important;
+            color: inherit !important;
+        }
+
+        /* Защита от копирования через контекстное меню */
+        img, svg {
+            -webkit-user-drag: none !important;
+            user-drag: none !important;
+            pointer-events: none !important;
         }
 
         /* ===== СТИЛИ ===== */
@@ -83,6 +111,7 @@
             -webkit-text-fill-color: transparent;
             animation: gradientMove 4s ease infinite;
             cursor: pointer;
+            pointer-events: none;
         }
         .logo span { font-weight:300; -webkit-text-fill-color:var(--muted); }
         .nav-links { display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
@@ -97,11 +126,11 @@
         .nav-links .btn-roblox:hover { background:#c42a2a; transform:scale(1.05); }
 
         .hero { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; padding:60px 0 40px; }
-        .hero h1 { font-size:52px; font-weight:900; line-height:1.1; background:var(--gradient); background-size:200% 200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:gradientMove 5s ease infinite; }
+        .hero h1 { font-size:52px; font-weight:900; line-height:1.1; background:var(--gradient); background-size:200% 200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:gradientMove 5s ease infinite; pointer-events: none; }
         .hero h1 .highlight { background:none; -webkit-text-fill-color:#fff; display:inline-block; position:relative; }
         .hero h1 .highlight::after { content:''; position:absolute; bottom:2px; left:0; width:100%; height:8px; background:var(--primary); opacity:0.3; border-radius:4px; }
-        .hero p { color:var(--muted); font-size:18px; margin:20px 0 30px; line-height:1.8; max-width:520px; }
-        .hero-badges { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+        .hero p { color:var(--muted); font-size:18px; margin:20px 0 30px; line-height:1.8; max-width:520px; pointer-events: none; }
+        .hero-badges { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; pointer-events: none; }
         .hero-badges span { background:var(--card); border:1px solid var(--border); padding:6px 16px; border-radius:30px; font-size:13px; color:var(--muted); display:inline-flex; align-items:center; gap:6px; }
         .hero-badges span .dot { width:6px; height:6px; border-radius:50%; background:var(--success); display:inline-block; animation:pulseGlow 2s infinite; }
         .download-btn-wrap { display:flex; gap:16px; flex-wrap:wrap; }
@@ -109,22 +138,22 @@
         .btn-primary:hover { transform:scale(1.05); box-shadow:0 12px 48px var(--primary-glow); }
         .btn-secondary { display:inline-flex; align-items:center; gap:10px; background:var(--card); color:var(--text); padding:18px 32px; border-radius:50px; font-weight:600; font-size:16px; text-decoration:none; border:1px solid var(--border); transition:0.3s; cursor:pointer; }
         .btn-secondary:hover { border-color:var(--primary); background:rgba(124,58,237,0.1); }
-        .hero-image { text-align:center; position:relative; }
+        .hero-image { text-align:center; position:relative; pointer-events: none; }
         .hero-image .glow { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:80%; height:80%; background:radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%); border-radius:50%; z-index:0; animation:pulseGlow 4s infinite; }
-        .hero-image img { max-width:100%; border-radius:24px; border:1px solid var(--border); position:relative; z-index:1; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
-        .hero-image .badge-float { position:absolute; bottom:20px; right:-10px; background:var(--card); border:1px solid var(--border); padding:12px 18px; border-radius:14px; font-size:13px; color:var(--muted); z-index:2; animation:float 3s ease-in-out infinite; backdrop-filter:blur(10px); }
+        .hero-image img { max-width:100%; border-radius:24px; border:1px solid var(--border); position:relative; z-index:1; box-shadow:0 20px 60px rgba(0,0,0,0.5); pointer-events: none; -webkit-user-drag: none; }
+        .hero-image .badge-float { position:absolute; bottom:20px; right:-10px; background:var(--card); border:1px solid var(--border); padding:12px 18px; border-radius:14px; font-size:13px; color:var(--muted); z-index:2; animation:float 3s ease-in-out infinite; backdrop-filter:blur(10px); pointer-events: none; }
 
         .features { padding:60px 0 40px; border-top:1px solid var(--border); }
-        .features h2 { text-align:center; font-size:36px; font-weight:800; margin-bottom:12px; }
-        .features .subtitle { text-align:center; color:var(--muted); font-size:17px; margin-bottom:40px; }
+        .features h2 { text-align:center; font-size:36px; font-weight:800; margin-bottom:12px; pointer-events: none; }
+        .features .subtitle { text-align:center; color:var(--muted); font-size:17px; margin-bottom:40px; pointer-events: none; }
         .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
-        .feature-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px 24px; text-align:center; transition:0.4s; animation:fadeUp 0.8s ease forwards; opacity:0; }
+        .feature-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px 24px; text-align:center; transition:0.4s; animation:fadeUp 0.8s ease forwards; opacity:0; pointer-events: none; }
         .feature-card:hover { transform:translateY(-6px); border-color:var(--primary); box-shadow:0 12px 40px rgba(124,58,237,0.08); }
         .feature-card .icon { font-size:40px; margin-bottom:12px; }
         .feature-card h3 { font-size:18px; font-weight:700; margin-bottom:6px; }
         .feature-card p { color:var(--muted); font-size:14px; line-height:1.6; }
 
-        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:24px; padding:40px 0; border-top:1px solid var(--border); text-align:center; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:24px; padding:40px 0; border-top:1px solid var(--border); text-align:center; pointer-events: none; }
         .stats .stat h3 { font-size:32px; font-weight:800; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
         .stats .stat p { color:var(--muted); font-size:14px; margin-top:4px; }
 
@@ -170,10 +199,10 @@
         .injector-panel .logout-btn:hover { background:var(--error); color:#fff; }
 
         .reviews { padding:40px 0; border-top:1px solid var(--border); }
-        .reviews h2 { text-align:center; font-size:32px; font-weight:800; margin-bottom:8px; }
-        .reviews .subtitle { text-align:center; color:var(--muted); margin-bottom:36px; }
+        .reviews h2 { text-align:center; font-size:32px; font-weight:800; margin-bottom:8px; pointer-events: none; }
+        .reviews .subtitle { text-align:center; color:var(--muted); margin-bottom:36px; pointer-events: none; }
         .review-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px; }
-        .review-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px; transition:0.4s; }
+        .review-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px; transition:0.4s; pointer-events: none; }
         .review-card:hover { border-color:var(--primary); transform:translateY(-4px); }
         .review-card .stars { color:var(--warning); font-size:18px; letter-spacing:2px; margin-bottom:6px; }
         .review-card .name { font-weight:700; font-size:15px; }
@@ -186,29 +215,32 @@
         .review-form .btn-add-review:hover { transform:scale(1.04); box-shadow:0 8px 32px var(--primary-glow); }
 
         .faq { padding:40px 0; border-top:1px solid var(--border); }
-        .faq h2 { text-align:center; font-size:32px; font-weight:800; margin-bottom:36px; }
+        .faq h2 { text-align:center; font-size:32px; font-weight:800; margin-bottom:36px; pointer-events: none; }
         .faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-        .faq-item { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px 24px; transition:0.3s; }
+        .faq-item { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px 24px; transition:0.3s; pointer-events: none; }
         .faq-item:hover { border-color:var(--primary); }
         .faq-item h4 { font-weight:600; margin-bottom:4px; }
         .faq-item p { color:var(--muted); font-size:14px; line-height:1.6; }
 
         .support-section { padding:40px 0; border-top:1px solid var(--border); }
-        .support-section h2 { text-align:center; font-size:32px; font-weight:800; margin-bottom:8px; }
-        .support-section .subtitle { text-align:center; color:var(--muted); margin-bottom:30px; }
+        .support-section h2 { text-align:center; font-size:32px; font-weight:800; margin-bottom:8px; pointer-events: none; }
+        .support-section .subtitle { text-align:center; color:var(--muted); margin-bottom:30px; pointer-events: none; }
         .support-card { background:var(--card); border-radius:28px; padding:36px 32px; border:1px solid var(--border); max-width:700px; margin:0 auto; transition:0.3s; }
         .support-card:hover { border-color:rgba(124,58,237,0.2); }
-        .chat-box { background:var(--bg); border-radius:16px; padding:16px; height:280px; overflow-y:auto; border:1px solid var(--border); margin-bottom:16px; display:flex; flex-direction:column; gap:8px; }
+        .chat-box { background:var(--bg); border-radius:16px; padding:16px; height:280px; overflow-y:auto; border:1px solid var(--border); margin-bottom:16px; display:flex; flex-direction:column; gap:8px; pointer-events: none; }
+        .chat-box .message { pointer-events: none; }
+        .chat-box .message.user { pointer-events: none; }
+        .chat-box .message.bot { pointer-events: none; }
         .chat-box::-webkit-scrollbar { width:5px; }
         .chat-box::-webkit-scrollbar-track { background:var(--bg); }
         .chat-box::-webkit-scrollbar-thumb { background:var(--border); border-radius:8px; }
-        .message { max-width:85%; padding:10px 14px; border-radius:14px; font-size:14px; line-height:1.5; animation:fadeUp 0.3s ease; word-wrap:break-word; }
+        .message { max-width:85%; padding:10px 14px; border-radius:14px; font-size:14px; line-height:1.5; animation:fadeUp 0.3s ease; word-wrap:break-word; pointer-events: none; }
         .message.user { align-self:flex-end; background:var(--primary); color:#fff; border-bottom-right-radius:4px; }
         .message.bot { align-self:flex-start; background:var(--card); border:1px solid var(--border); color:var(--text); border-bottom-left-radius:4px; }
         .message .time { font-size:10px; opacity:0.5; margin-top:4px; display:block; }
         .message.bot .time { color:var(--muted); }
         .message.user .time { color:rgba(255,255,255,0.6); }
-        .typing-indicator { display:none; align-self:flex-start; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:10px 16px; font-size:14px; color:var(--muted); border-bottom-left-radius:4px; animation:fadeUp 0.3s ease; }
+        .typing-indicator { display:none; align-self:flex-start; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:10px 16px; font-size:14px; color:var(--muted); border-bottom-left-radius:4px; animation:fadeUp 0.3s ease; pointer-events: none; }
         .input-row { display:flex; gap:10px; }
         .input-row input { flex:1; padding:12px 16px; background:var(--bg); border:1px solid var(--border); border-radius:14px; color:var(--text); font-size:15px; outline:none; transition:0.3s; font-family:'Inter', sans-serif; }
         .input-row input:focus { border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-glow); }
@@ -523,15 +555,74 @@
 
 <script>
     // ============================================================
-    //  ЗАЩИТА ОТ F12 И ВЫДЕЛЕНИЯ
+    //  ЗАЩИТА ОТ F12, КОПИРОВАНИЯ И ВЫДЕЛЕНИЯ
     // ============================================================
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+        // Защита от F12 и DevTools
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+            (e.ctrlKey && e.key === 'U') ||
+            (e.ctrlKey && e.shiftKey && e.key === 'S') ||
+            (e.ctrlKey && e.key === 'P')) {
+            e.preventDefault();
+            return false;
+        }
+        // Защита от Ctrl+C, Ctrl+V, Ctrl+X (кроме полей ввода)
+        if ((e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'x' || e.key === 'a')) && 
+            !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
             e.preventDefault();
             return false;
         }
     });
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+    // Защита от контекстного меню (ПКМ)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Защита от выделения через мышь (дополнительно)
+    document.addEventListener('selectstart', function(e) {
+        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Защита от копирования через Ctrl+Ins и Shift+Ins
+    document.addEventListener('copy', function(e) {
+        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Защита от перетаскивания изображений и ссылок
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Удаление выделения при клике
+    document.addEventListener('mousedown', function(e) {
+        if (!['INPUT', 'TEXTAREA'].includes(e.target.tagName) && !e.target.closest('button')) {
+            if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+    });
+
+    // Блокировка открытия DevTools через Ctrl+Shift+I (повторно)
+    window.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+            e.preventDefault();
+            return false;
+        }
+        if (e.ctrlKey && e.key === 'I') {
+            e.preventDefault();
+            return false;
+        }
+    });
 
     // ============================================================
     //  КОНФИГУРАЦИЯ
